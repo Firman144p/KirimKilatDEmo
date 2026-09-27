@@ -1,0 +1,2679 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- FIX: Prevent iframe host environment error "Cannot set property fetch of #<Window> which has only a getter" -->
+  <script>
+    (function() {
+      try {
+        var _curFetch = window.fetch ? window.fetch.bind(window) : null;
+        Object.defineProperty(window, 'fetch', {
+          get: function() { return _curFetch; },
+          set: function(fn) { _curFetch = fn; },
+          configurable: true,
+          enumerable: true
+        });
+        if (typeof Window !== 'undefined' && Window.prototype) {
+          try {
+            Object.defineProperty(Window.prototype, 'fetch', {
+              get: function() { return _curFetch; },
+              set: function(fn) { _curFetch = fn; },
+              configurable: true,
+              enumerable: true
+            });
+          } catch(e) {}
+        }
+      } catch (err) {}
+    })();
+  </script>
+
+  <title>KirimKilat — Agregator Ekspedisi, Cek Ongkir Multi-Kurir & Jemput Paket Gratis</title>
+  <meta name="description" content="Platform agregator logistik & ekspedisi untuk toko online & UMKM. Diskon ongkir hingga 35%, jemput paket gratis tanpa minimum, pencairan COD 24 jam, dan cek ongkir instan." />
+  
+  <!-- Open Graph / SEO -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="KirimKilat — Kirim Paket Lebih Murah & Cepat untuk Bisnis Online" />
+  <meta property="og:description" content="Cek ongkir multi-ekspedisi, jemput paket tanpa minimum pesanan, dan nikmati diskon ongkir hingga 35%." />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       0. MODERN CRISP TECH DESIGN SYSTEM (HIGH-TRUST & PROFESSIONAL)
+       Color Palette: Pure Slate Canvas, Royal Blue, Emerald, Warm Sand
+       ============================================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-page: #f8fafc;
+      --bg-white: #ffffff;
+      --bg-subtle: #f1f5f9;
+      --bg-card: #ffffff;
+      --bg-dark: #0f172a;
+
+      --border-subtle: #e2e8f0;
+      --border-medium: #cbd5e1;
+      --border-active: #3b82f6;
+
+      --blue-primary: #2563eb;
+      --blue-hover: #1d4ed8;
+      --blue-subtle: #eff6ff;
+      --blue-border: #bfdbfe;
+
+      --emerald-accent: #059669;
+      --emerald-subtle: #ecfdf5;
+      --amber-accent: #d97706;
+      --amber-subtle: #fffbeb;
+
+      --text-main: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+
+      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --radius-xl: 24px;
+      --radius-full: 9999px;
+
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 14px -2px rgba(15, 23, 42, 0.08);
+      --shadow-lg: 0 12px 30px -4px rgba(15, 23, 42, 0.12);
+      --shadow-xl: 0 20px 40px -8px rgba(15, 23, 42, 0.16);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+      color-scheme: light;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      overflow-x: hidden;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    ::selection {
+      background: var(--blue-primary);
+      color: #ffffff;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    /* ============================================================
+       DEMO & PROTOTYPE DISCLAIMER BANNER & MODAL
+       ============================================================ */
+    .site-header-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+
+    .demo-banner {
+      background: #0f172a;
+      color: #f1f5f9;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 0.55rem 0;
+      font-size: 0.82rem;
+      line-height: 1.4;
+      transition: max-height 0.3s ease, padding 0.3s ease, opacity 0.3s ease;
+    }
+
+    .demo-banner.hidden {
+      display: none;
+    }
+
+    .demo-banner-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .demo-banner-content {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+
+    .demo-tag {
+      background: #d97706;
+      color: #ffffff;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 0.18rem 0.55rem;
+      border-radius: var(--radius-full);
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    .demo-banner-text strong {
+      color: #fbbf24;
+    }
+
+    .demo-banner-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-shrink: 0;
+    }
+
+    .btn-demo-info {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+
+    .btn-demo-info:hover {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: #ffffff;
+    }
+
+    .btn-demo-close {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.35rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0 0.25rem;
+      transition: color 0.15s ease;
+      display: flex;
+      align-items: center;
+    }
+
+    .btn-demo-close:hover {
+      color: #ffffff;
+    }
+
+    /* Floating Prototype Watermark */
+    .demo-watermark-badge {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      background: rgba(15, 23, 42, 0.94);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      border-radius: var(--radius-full);
+      padding: 0.45rem 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #e2e8f0;
+      cursor: pointer;
+      z-index: 900;
+      transition: all 0.2s ease;
+    }
+
+    .demo-watermark-badge:hover {
+      transform: translateY(-2px);
+      background: #0f172a;
+      border-color: #3b82f6;
+      color: #ffffff;
+      box-shadow: 0 10px 28px rgba(37, 99, 235, 0.35);
+    }
+
+    .watermark-pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulseWatermark 1.8s infinite;
+    }
+
+    @keyframes pulseWatermark {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.25); }
+    }
+
+    /* Demo Info Modal Overlay */
+    .demo-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.72);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      z-index: 3000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .demo-modal-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .demo-modal-card {
+      background: var(--bg-white);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      max-width: 540px;
+      width: 100%;
+      padding: 2rem;
+      box-shadow: var(--shadow-xl);
+      transform: translateY(20px);
+      transition: transform 0.25s ease;
+    }
+
+    .demo-modal-overlay.active .demo-modal-card {
+      transform: translateY(0);
+    }
+
+    .demo-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .footer-demo-disclaimer {
+      width: 100%;
+      background: #fffbeb;
+      border: 1px solid #fef3c7;
+      color: #92400e;
+      padding: 0.85rem 1.25rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.84rem;
+      line-height: 1.5;
+      margin-top: 2rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+    }
+
+    /* ============================================================
+       1. NAVIGATION BAR
+       ============================================================ */
+    .top-nav {
+      position: relative;
+      width: 100%;
+      height: 74px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+      transition: all 0.25s ease;
+    }
+
+    .top-nav.scrolled {
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+    }
+
+    .nav-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+      color: var(--text-main);
+      font-weight: 800;
+      font-size: 1.35rem;
+      letter-spacing: -0.03em;
+    }
+
+    .brand-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--blue-primary), #1e40af);
+      color: #ffffff;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+    }
+
+    .brand-logo span {
+      color: var(--blue-primary);
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-item-link {
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      font-weight: 600;
+      transition: color 0.15s ease;
+    }
+
+    .nav-item-link:hover {
+      color: var(--blue-primary);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.6rem 1.15rem;
+      background: var(--bg-white);
+      color: var(--text-main);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-subtle);
+      border-color: var(--text-secondary);
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.35rem;
+      background: var(--blue-primary);
+      color: #ffffff;
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      background: var(--blue-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+    }
+
+    /* Mobile hamburger toggle */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 0.45rem;
+      color: var(--text-main);
+      cursor: pointer;
+    }
+
+    .mobile-drawer {
+      display: none;
+      position: fixed;
+      top: 74px;
+      left: 0;
+      right: 0;
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 1.5rem;
+      flex-direction: column;
+      gap: 1.2rem;
+      z-index: 999;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .mobile-drawer.open {
+      display: flex;
+    }
+
+    .mobile-drawer a {
+      color: var(--text-main);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    /* ============================================================
+       2. HERO SECTION & INTERACTIVE LIVE CEK ONGKIR WIDGET
+       ============================================================ */
+    .hero-wrap {
+      padding-top: 155px;
+      padding-bottom: 75px;
+      background: linear-gradient(180deg, #f8fafc 0%, #edf2f7 100%);
+      border-bottom: 1px solid var(--border-subtle);
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+
+    .hero-badge-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--blue-subtle);
+      border: 1px solid var(--blue-border);
+      color: var(--blue-primary);
+      padding: 0.35rem 0.9rem;
+      border-radius: var(--radius-full);
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-badge-tag .badge-spark {
+      background: var(--blue-primary);
+      color: #ffffff;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: var(--radius-full);
+      font-weight: 800;
+    }
+
+    .hero-title {
+      font-size: clamp(2.4rem, 4.4vw, 3.6rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.035em;
+      color: var(--text-main);
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-title .highlight-blue {
+      color: var(--blue-primary);
+      position: relative;
+      display: inline-block;
+    }
+
+    .hero-desc {
+      font-size: 1.12rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      margin-bottom: 2rem;
+      max-width: 540px;
+    }
+
+    .hero-perks-row {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.25rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .perk-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .perk-icon-check {
+      color: var(--emerald-accent);
+    }
+
+    .hero-proof-lockup {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-medium);
+    }
+
+    .hero-rating-stars {
+      color: #f59e0b;
+      font-size: 0.95rem;
+    }
+
+    .hero-proof-text {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    .hero-proof-text strong {
+      color: var(--text-main);
+      display: block;
+    }
+
+    /* ============================================================
+       INTERACTIVE CEK ONGKIR TOOL (HERO FOCAL ELEMENT)
+       ============================================================ */
+    .ongkir-card {
+      background: var(--bg-white);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      box-shadow: var(--shadow-xl);
+      position: relative;
+    }
+
+    .ongkir-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .ongkir-card-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .ongkir-tab-group {
+      display: flex;
+      gap: 0.4rem;
+      background: var(--bg-subtle);
+      padding: 0.25rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .ongkir-tab-btn {
+      background: none;
+      border: none;
+      padding: 0.4rem 0.85rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .ongkir-tab-btn.active {
+      background: var(--bg-white);
+      color: var(--blue-primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .ongkir-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .field-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .field-select, .field-input {
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-sm);
+      background: var(--bg-white);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 500;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+
+    .field-select:focus, .field-input:focus {
+      border-color: var(--blue-primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .weight-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .weight-val-badge {
+      font-family: var(--font-mono);
+      color: var(--blue-primary);
+      font-weight: 700;
+      background: var(--blue-subtle);
+      padding: 0.15rem 0.55rem;
+      border-radius: var(--radius-full);
+    }
+
+    input[type=range] {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #cbd5e1;
+      outline: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+      margin-bottom: 1.25rem;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--blue-primary);
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.4);
+      border: 2px solid #ffffff;
+      transition: transform 0.15s ease;
+    }
+
+    input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    .btn-calc-submit {
+      width: 100%;
+      padding: 0.75rem;
+      background: var(--blue-primary);
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .btn-calc-submit:hover {
+      background: var(--blue-hover);
+    }
+
+    /* Live Rate Results Container */
+    .rates-result-box {
+      margin-top: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .rate-card-item {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+
+    .rate-card-item:hover {
+      border-color: var(--blue-primary);
+      background: var(--blue-subtle);
+    }
+
+    .courier-info {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .courier-pill {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      color: #ffffff;
+      letter-spacing: 0.02em;
+    }
+
+    .courier-jnt { background: #dc2626; }
+    .courier-sicepat { background: #ea580c; }
+    .courier-jne { background: #0284c7; }
+    .courier-anteraja { background: #7c3aed; }
+
+    .courier-service-name {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .courier-eta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .courier-pricing {
+      text-align: right;
+    }
+
+    .price-normal {
+      font-size: 0.72rem;
+      color: var(--text-light);
+      text-decoration: line-through;
+    }
+
+    .price-discounted {
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--emerald-accent);
+    }
+
+    /* Resi Tracking Tab Content */
+    .resi-tab-content {
+      display: none;
+    }
+
+    .resi-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .timeline-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      position: relative;
+    }
+
+    .timeline-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--blue-primary);
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+
+    .timeline-step.completed .timeline-dot {
+      background: var(--emerald-accent);
+    }
+
+    .timeline-step-text strong {
+      display: block;
+      font-size: 0.84rem;
+      color: var(--text-main);
+    }
+
+    .timeline-step-text span {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+
+    /* ============================================================
+       COURIER PARTNERS TICKER
+       ============================================================ */
+    .partner-section {
+      padding: 2.25rem 0;
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .partner-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .partner-headline {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .courier-logo-group {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .courier-brand-tag {
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+      color: var(--text-muted);
+      transition: color 0.15s ease;
+      cursor: default;
+    }
+
+    .courier-brand-tag:hover {
+      color: var(--text-main);
+    }
+
+    /* ============================================================
+       3. FITUR & KEUNGGULAN (4 FITUR UTAMA)
+       ============================================================ */
+    .section-wrap {
+      padding: 95px 0;
+      position: relative;
+    }
+
+    .section-header-center {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 3.5rem;
+    }
+
+    .section-pill-tag {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--blue-primary);
+      background: var(--blue-subtle);
+      border: 1px solid var(--blue-border);
+      padding: 0.35rem 0.85rem;
+      border-radius: var(--radius-full);
+      margin-bottom: 0.85rem;
+    }
+
+    .section-headline {
+      font-size: clamp(2rem, 3.5vw, 2.75rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text-main);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .section-subtext {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .features-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.75rem;
+    }
+
+    .feature-clean-card {
+      background: var(--bg-white);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 2.25rem 1.75rem;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .feature-clean-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--blue-border);
+    }
+
+    .feature-icon-square {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-sm);
+      background: var(--blue-subtle);
+      color: var(--blue-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s ease;
+    }
+
+    .feature-clean-card:hover .feature-icon-square {
+      background: var(--blue-primary);
+      color: #ffffff;
+    }
+
+    .feature-clean-card h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.65rem;
+      letter-spacing: -0.02em;
+    }
+
+    .feature-clean-card p {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      flex-grow: 1;
+    }
+
+    .feature-link-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--blue-primary);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      margin-top: 1.25rem;
+      text-decoration: none;
+    }
+
+    /* ============================================================
+       4. CARA KERJA (HOW IT WORKS - 3 LANGKAH)
+       ============================================================ */
+    .steps-wrapper {
+      background: var(--bg-white);
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .steps-row-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.25rem;
+      position: relative;
+    }
+
+    .step-box-item {
+      background: var(--bg-page);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 2.25rem 1.75rem;
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+
+    .step-box-item:hover, .step-box-item.active {
+      border-color: var(--blue-primary);
+      background: var(--bg-white);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-4px);
+    }
+
+    .step-badge-circle {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--bg-white);
+      border: 2px solid var(--border-medium);
+      color: var(--text-main);
+      font-weight: 800;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s ease;
+    }
+
+    .step-box-item:hover .step-badge-circle, .step-box-item.active .step-badge-circle {
+      background: var(--blue-primary);
+      color: #ffffff;
+      border-color: var(--blue-primary);
+    }
+
+    .step-box-item h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    .step-box-item p {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ============================================================
+       5. INTERACTIVE SAVINGS & COD CALCULATOR
+       ============================================================ */
+    .calculator-card {
+      margin-top: 4.5rem;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      color: #ffffff;
+      border-radius: var(--radius-xl);
+      padding: 3rem;
+      box-shadow: var(--shadow-xl);
+    }
+
+    .calc-two-col {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+
+    .calc-slider-unit {
+      margin-bottom: 2rem;
+    }
+
+    .calc-label-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      margin-bottom: 0.75rem;
+    }
+
+    .calc-label-val {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: #38bdf8;
+      font-size: 1.05rem;
+    }
+
+    .calc-stats-whitebox {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius-lg);
+      padding: 2.25rem 2rem;
+      backdrop-filter: blur(10px);
+      text-align: center;
+    }
+
+    .calc-stat-label-muted {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #94a3b8;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .calc-stat-big-highlight {
+      font-size: 2.75rem;
+      font-weight: 800;
+      color: #34d399;
+      font-family: var(--font-mono);
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .calc-subgrid-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .mini-stat-item {
+      text-align: left;
+    }
+
+    .mini-stat-item span {
+      display: block;
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    .mini-stat-item strong {
+      font-size: 1.15rem;
+      color: #ffffff;
+      font-family: var(--font-mono);
+    }
+
+    /* ============================================================
+       6. TESTIMONI (REAL SOCIAL PROOF)
+       ============================================================ */
+    .filter-pills-row {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .pill-filter-btn {
+      padding: 0.5rem 1.25rem;
+      border-radius: var(--radius-full);
+      background: var(--bg-white);
+      border: 1px solid var(--border-medium);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .pill-filter-btn.active, .pill-filter-btn:hover {
+      background: var(--blue-primary);
+      color: #ffffff;
+      border-color: var(--blue-primary);
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.75rem;
+    }
+
+    .testimonial-card {
+      background: var(--bg-white);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 2rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--border-medium);
+    }
+
+    .testi-stars {
+      color: #f59e0b;
+      margin-bottom: 0.85rem;
+      font-size: 0.95rem;
+    }
+
+    .testi-quote {
+      font-size: 0.96rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      font-style: italic;
+      margin-bottom: 1.75rem;
+    }
+
+    .testi-author-row {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .testi-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--blue-subtle);
+      color: var(--blue-primary);
+      font-weight: 800;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--blue-border);
+    }
+
+    .testi-author-name {
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--text-main);
+    }
+
+    .testi-author-business {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ============================================================
+       7. FAQ ACCORDION
+       ============================================================ */
+    .faq-container {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .faq-item {
+      background: var(--bg-white);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .faq-item.active {
+      border-color: var(--blue-border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .faq-btn-trigger {
+      width: 100%;
+      padding: 1.25rem 1.5rem;
+      background: transparent;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .faq-arrow {
+      color: var(--blue-primary);
+      transition: transform 0.25s ease;
+    }
+
+    .faq-item.active .faq-arrow {
+      transform: rotate(180deg);
+    }
+
+    .faq-panel-body {
+      max-height: 0;
+      overflow: hidden;
+      padding: 0 1.5rem;
+      color: var(--text-secondary);
+      font-size: 0.94rem;
+      line-height: 1.65;
+      transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1), padding 0.3s ease;
+    }
+
+    .faq-item.active .faq-panel-body {
+      max-height: 250px;
+      padding-bottom: 1.5rem;
+    }
+
+    /* ============================================================
+       8. SECONDARY CONVERSION CTA
+       ============================================================ */
+    .cta-banner-wrap {
+      padding: 85px 0 100px;
+    }
+
+    .cta-clean-card {
+      background: linear-gradient(135deg, var(--blue-primary) 0%, #1e40af 100%);
+      color: #ffffff;
+      border-radius: var(--radius-xl);
+      padding: 4.5rem 2.5rem;
+      text-align: center;
+      box-shadow: var(--shadow-xl);
+    }
+
+    .cta-clean-card h2 {
+      font-size: clamp(2rem, 3.8vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+    }
+
+    .cta-clean-card p {
+      font-size: 1.12rem;
+      color: #dbeafe;
+      max-width: 600px;
+      margin: 0 auto 2.25rem;
+      line-height: 1.6;
+    }
+
+    .lead-signup-form {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      max-width: 500px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .lead-input-field {
+      flex: 1;
+      padding: 0.85rem 1.25rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: #ffffff;
+      color: var(--text-main);
+      font-size: 0.94rem;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .lead-input-field:focus {
+      border-color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35);
+    }
+
+    .btn-cta-lead {
+      padding: 0.85rem 1.6rem;
+      background: #ffffff;
+      color: var(--blue-primary);
+      font-weight: 800;
+      font-size: 0.92rem;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-cta-lead:hover {
+      background: #f8fafc;
+      transform: translateY(-2px);
+    }
+
+    .cta-trust-items {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: #bfdbfe;
+    }
+
+    /* ============================================================
+       9. FOOTER
+       ============================================================ */
+    .site-footer {
+      background: var(--bg-white);
+      border-top: 1px solid var(--border-subtle);
+      padding: 70px 0 35px;
+    }
+
+    .footer-columns {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3.5rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .footer-bio-text {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.65;
+      margin-top: 1rem;
+      max-width: 320px;
+    }
+
+    .footer-col-title {
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-main);
+      margin-bottom: 1.25rem;
+    }
+
+    .footer-links-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .footer-links-list a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.15s ease;
+    }
+
+    .footer-links-list a:hover {
+      color: var(--blue-primary);
+    }
+
+    .footer-bottom-row {
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* Floating Back To Top */
+    .back-top-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--blue-primary);
+      color: #ffffff;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 990;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(12px);
+      transition: all 0.25s ease;
+      box-shadow: var(--shadow-md);
+    }
+
+    .back-top-btn.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .back-top-btn:hover {
+      background: var(--blue-hover);
+      transform: translateY(-2px);
+    }
+
+    /* Toast Notification */
+    .toast-popup {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--bg-dark);
+      color: #ffffff;
+      padding: 0.85rem 1.5rem;
+      border-radius: var(--radius-full);
+      box-shadow: var(--shadow-xl);
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      z-index: 2000;
+      opacity: 0;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .toast-popup.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Scroll Reveal Animation */
+    .reveal-item {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    .reveal-item.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
+    .delay-4 { transition-delay: 0.4s; }
+
+    /* ============================================================
+       RESPONSIVE BREAKPOINTS
+       ============================================================ */
+    @media (max-width: 1024px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .steps-row-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .calc-two-col {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .footer-columns {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-menu, .nav-actions .btn-secondary {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .hero-wrap {
+        padding-top: 145px;
+        padding-bottom: 50px;
+      }
+
+      .ongkir-form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .lead-signup-form {
+        flex-direction: column;
+      }
+
+      .lead-input-field, .btn-cta-lead {
+        width: 100%;
+      }
+
+      .calculator-card {
+        padding: 2rem 1.5rem;
+      }
+
+      .footer-columns {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== PROTOTYPE / DEMO DISCLAIMER HEADER ==================== -->
+  <div class="site-header-wrapper" id="siteHeader">
+    <!-- Top Persistent Disclaimer Bar -->
+    <aside class="demo-banner" id="demoBanner" role="alert">
+      <div class="container demo-banner-inner">
+        <div class="demo-banner-content">
+          <span class="demo-tag">PROTOTYPE / DEMO</span>
+          <span class="demo-banner-text">
+            <strong>Catatan Penting:</strong> Website ini adalah <em>prototipe & demo interaktif</em> yang dibuat sebagai portofolio landing page startup teknologi. Fitur cek ongkir, lacak resi, dan transaksi disimulasikan secara dinamis.
+          </span>
+        </div>
+        <div class="demo-banner-actions">
+          <button class="btn-demo-info" onclick="openDemoModal()" title="Lihat penjelasan prototipe">Detail Prototipe</button>
+          <button class="btn-demo-close" onclick="dismissDemoBanner()" aria-label="Tutup banner pemberitahuan">&times;</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Top Navbar -->
+    <header class="top-nav" id="mainNav">
+      <div class="container nav-content">
+        <!-- Brand Logo -->
+        <a href="#hero" class="brand-logo" aria-label="KirimKilat Home">
+          <div class="brand-logo-icon">
+            <!-- Package / Truck Delivery Icon -->
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+          </div>
+          <div>Kirim<span>Kilat</span></div>
+        </a>
+
+        <!-- Desktop Nav Links -->
+        <ul class="nav-menu">
+          <li><a href="#cek-ongkir" class="nav-item-link">Cek Ongkir</a></li>
+          <li><a href="#fitur" class="nav-item-link">Keunggulan</a></li>
+          <li><a href="#cara-kerja" class="nav-item-link">Cara Kerja</a></li>
+          <li><a href="#kalkulator-profit" class="nav-item-link">Kalkulator Hemat</a></li>
+          <li><a href="#testimoni" class="nav-item-link">Testimoni Seller</a></li>
+          <li><a href="#faq" class="nav-item-link">FAQ</a></li>
+        </ul>
+
+        <!-- CTA Actions -->
+        <div class="nav-actions">
+          <a href="#cek-ongkir" class="btn-secondary" onclick="focusOngkirTab('resi')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            Lacak Resi
+          </a>
+          <a href="#daftar" class="btn-primary">
+            Daftar Gratis
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+
+        <!-- Mobile Button -->
+        <button class="mobile-menu-btn" id="mobileToggle" aria-label="Buka Menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+  </div>
+
+  <!-- Floating Prototype Badge (Pojok Layar) -->
+  <div class="demo-watermark-badge" onclick="openDemoModal()" title="Klik untuk informasi prototipe">
+    <span class="watermark-pulse"></span>
+    <span>Demo Portofolio</span>
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+  </div>
+
+  <!-- Prototype Info Modal Popup -->
+  <div class="demo-modal-overlay" id="demoModal" onclick="closeDemoModalOnOverlay(event)">
+    <div class="demo-modal-card">
+      <div class="demo-modal-header">
+        <div style="display:flex; align-items:center; gap: 0.6rem;">
+          <span class="demo-tag" style="background:#2563eb;">PORTFOLIO SHOWCASE</span>
+          <h3 style="font-size: 1.12rem; font-weight: 800; color: var(--text-main);">Tentang Prototipe Website Ini</h3>
+        </div>
+        <button class="btn-demo-close" onclick="closeDemoModal()">&times;</button>
+      </div>
+      <div class="demo-modal-body">
+        <p style="margin-bottom: 0.85rem; color: var(--text-secondary); font-size: 0.94rem; line-height: 1.6;">
+          Website <strong>KirimKilat</strong> ini dibuat sebagai <strong>prototipe & demonstrasi interaktif</strong> untuk menampilkan keahlian perancangan desain web (UI/UX) dan pengembangan landing page teknologi modern yang fungsional dan responsif.
+        </p>
+        <div style="background: var(--bg-subtle); border-radius: var(--radius-sm); padding: 1rem; margin-bottom: 1.25rem; font-size: 0.88rem; color: var(--text-secondary);">
+          <strong style="color: var(--text-main); display:block; margin-bottom: 0.45rem;">Fitur Interaktif yang Dapat Dicoba:</strong>
+          <ul style="padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.35rem;">
+            <li>Kalkulator Cek Ongkir multi-ekspedisi (J&T, SiCepat, JNE, Anteraja) dengan kalkulasi berat dinamis.</li>
+            <li>Pelacak nomor resi paket (simulasi live timeline tracking).</li>
+            <li>Kalkulator simulasi penghematan ongkir bulanan seller.</li>
+            <li>Filter kategori review/testimoni pebisnis online.</li>
+            <li>Accordion FAQ interaktif dan formulir registrasi toko.</li>
+          </ul>
+        </div>
+        <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.25rem;">
+          <em>Peringatan: Seluruh data nama merek, tarif pengiriman, dan review pada prototipe ini hanya difungsikan sebagai materi demonstrasi portofolio.</em>
+        </p>
+        <button class="btn-primary" style="width: 100%; justify-content: center; padding: 0.75rem;" onclick="closeDemoModal()">
+          Saya Mengerti, Lanjutkan Uji Coba ➔
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-drawer" id="mobileDrawer">
+    <a href="#cek-ongkir" class="mobile-drawer-link">Cek Ongkir Multi-Kurir</a>
+    <a href="#fitur" class="mobile-drawer-link">Keunggulan Layanan</a>
+    <a href="#cara-kerja" class="mobile-drawer-link">Cara Kerja</a>
+    <a href="#kalkulator-profit" class="mobile-drawer-link">Kalkulator Diskon</a>
+    <a href="#testimoni" class="mobile-drawer-link">Ulasan Seller</a>
+    <a href="#faq" class="mobile-drawer-link">FAQ</a>
+    <a href="#daftar" class="btn-primary" style="justify-content: center; margin-top: 0.5rem;">Daftar Akun Gratis ➔</a>
+  </div>
+
+  <!-- ==================== 2. HERO SECTION ==================== -->
+  <section class="hero-wrap" id="hero">
+    <div class="container hero-grid">
+      <!-- Left Column: Copy & Social Proof -->
+      <div class="hero-content">
+        <div class="hero-badge-tag reveal-item">
+          <span class="badge-spark">HEMAT HINGGA 35%</span>
+          <span>Platform Agregator Ekspedisi #1 di Indonesia</span>
+        </div>
+
+        <h1 class="hero-title reveal-item delay-1">
+          Kirim Paket Bisnis Lebih Hemat, <span class="highlight-blue">Jemput Gratis Tanpa Minimum</span>
+        </h1>
+
+        <p class="hero-desc reveal-item delay-2">
+          Bandingkan tarif J&T, SiCepat, JNE, dan Anteraja dalam satu layar. Nikmati diskon ongkir instan hingga 35%, sistem COD cair 24 jam, dan kurir jemput paket langsung ke lokasi Anda.
+        </p>
+
+        <div class="hero-perks-row reveal-item delay-3">
+          <div class="perk-item">
+            <svg class="perk-icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Tanpa Biaya Langganan</span>
+          </div>
+          <div class="perk-item">
+            <svg class="perk-icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Pickup Gratis 1 Paket Pun Dijemput</span>
+          </div>
+          <div class="perk-item">
+            <svg class="perk-icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Dana COD Cair Harian</span>
+          </div>
+        </div>
+
+        <!-- Social Proof Stats -->
+        <div class="hero-proof-lockup reveal-item delay-4">
+          <div>
+            <div class="hero-rating-stars">★★★★★</div>
+            <div class="hero-proof-text">
+              <strong>4.9 / 5.0 dari 8.500+ Seller</strong>
+              <span>Telah memproses lebih dari 4.2 Juta pengiriman paket</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Interactive Real-Time Cek Ongkir & Lacak Resi Tool -->
+      <div class="hero-interactive reveal-item delay-2" id="cek-ongkir">
+        <div class="ongkir-card">
+          <div class="ongkir-card-header">
+            <div class="ongkir-card-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue-primary)" stroke-width="2.3">
+                <rect x="1" y="3" width="15" height="13"></rect>
+                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                <circle cx="18.5" cy="18.5" r="2.5"></circle>
+              </svg>
+              <span>Kalkulator Tarif & Resi</span>
+            </div>
+            <div class="ongkir-tab-group">
+              <button class="ongkir-tab-btn active" id="tabOngkirBtn" onclick="switchOngkirTab('ongkir')">Cek Tarif</button>
+              <button class="ongkir-tab-btn" id="tabResiBtn" onclick="switchOngkirTab('resi')">Lacak Resi</button>
+            </div>
+          </div>
+
+          <!-- Tab 1: Cek Ongkir Form -->
+          <div id="panelOngkir">
+            <div class="ongkir-form-grid">
+              <div class="form-field-group">
+                <label class="field-label">Kota Asal (Pengirim)</label>
+                <select class="field-select" id="originSelect">
+                  <option value="Jakarta">Jakarta Barat (DKI Jakarta)</option>
+                  <option value="Bandung">Bandung (Jawa Barat)</option>
+                  <option value="Surabaya">Surabaya (Jawa Timur)</option>
+                  <option value="Semarang">Semarang (Jawa Tengah)</option>
+                  <option value="Medan">Medan (Sumatera Utara)</option>
+                </select>
+              </div>
+
+              <div class="form-field-group">
+                <label class="field-label">Kota Tujuan (Penerima)</label>
+                <select class="field-select" id="destSelect">
+                  <option value="Surabaya">Surabaya (Jawa Timur)</option>
+                  <option value="Bandung">Bandung (Jawa Barat)</option>
+                  <option value="Jakarta">Jakarta Selatan (DKI Jakarta)</option>
+                  <option value="Yogyakarta">Yogyakarta (DIY)</option>
+                  <option value="Denpasar">Denpasar (Bali)</option>
+                  <option value="Makassar">Makassar (Sulawesi Selatan)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="weight-row">
+              <span>Berat Paket:</span>
+              <span class="weight-val-badge" id="weightDisplay">1.0 kg</span>
+            </div>
+            <input type="range" id="weightRange" min="1" max="10" step="0.5" value="1" />
+
+            <button class="btn-calc-submit" onclick="calculateShippingRates()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <span>Bandingkan Tarif Ongkir</span>
+            </button>
+
+            <!-- Dynamic Rate Comparison Output -->
+            <div class="rates-result-box" id="ratesOutputList">
+              <!-- Rendered via JavaScript -->
+            </div>
+          </div>
+
+          <!-- Tab 2: Lacak Resi Form -->
+          <div id="panelResi" class="resi-tab-content">
+            <div class="form-field-group" style="margin-bottom: 0.85rem;">
+              <label class="field-label">Nomor Resi / AWB Paket</label>
+              <div style="display:flex; gap: 0.5rem;">
+                <input type="text" class="field-input" id="resiInput" value="KK-99214-JKT" placeholder="Contoh: KK-99214-JKT" />
+                <button class="btn-calc-submit" style="width: auto; padding: 0.65rem 1rem;" onclick="trackResi()">Lacak</button>
+              </div>
+            </div>
+
+            <div class="resi-timeline" id="resiTimelineList">
+              <div class="timeline-step completed">
+                <div class="timeline-dot"></div>
+                <div class="timeline-step-text">
+                  <strong>Paket Sedang Diantar Kurir (Out for Delivery)</strong>
+                  <span>26 Sep, 09:42 WIB — Menuju alamat penerima di Surabaya</span>
+                </div>
+              </div>
+              <div class="timeline-step completed">
+                <div class="timeline-dot"></div>
+                <div class="timeline-step-text">
+                  <strong>Tiba di Hub Transit Surabaya</strong>
+                  <span>25 Sep, 23:15 WIB — Pemrosesan sortir ekspedisi</span>
+                </div>
+              </div>
+              <div class="timeline-step">
+                <div class="timeline-dot"></div>
+                <div class="timeline-step-text">
+                  <strong>Paket Dijemput Kurir dari Pengirim</strong>
+                  <span>25 Sep, 14:30 WIB — Drop point Jakarta Barat</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== LOGO EKSPEDISI REPUTABLE ==================== -->
+  <section class="partner-section">
+    <div class="container partner-flex">
+      <div class="partner-headline">Terintegrasi Resmi dengan Ekspedisi Terbesar:</div>
+      <div class="courier-logo-group">
+        <span class="courier-brand-tag" style="color:#dc2626;">J&T EXPRESS</span>
+        <span class="courier-brand-tag" style="color:#ea580c;">SICEPAT EKSPRES</span>
+        <span class="courier-brand-tag" style="color:#0284c7;">JNE REGULER</span>
+        <span class="courier-brand-tag" style="color:#7c3aed;">ANTERAJA</span>
+        <span class="courier-brand-tag" style="color:#e11d48;">NINJA XPRESS</span>
+        <span class="courier-brand-tag" style="color:#059669;">SAP EXPRESS</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 3. FITUR & KEUNGGULAN ==================== -->
+  <section class="section-wrap" id="fitur">
+    <div class="container">
+      <div class="section-header-center reveal-item">
+        <div class="section-pill-tag">Keunggulan Layanan</div>
+        <h2 class="section-headline">Semua Solusi Pengiriman untuk Melesatkan Penjualan Toko Anda</h2>
+        <p class="section-subtext">Kirim barang dagangan tanpa repot antre di gerai, hemat ongkos operasional, dan buat pelanggan online Anda puas.</p>
+      </div>
+
+      <div class="features-card-grid">
+        <!-- Feature 1 -->
+        <div class="feature-clean-card reveal-item delay-1">
+          <div class="feature-icon-square">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <h3>Diskon Ongkir Hingga 35%</h3>
+          <p>Potongan tarif langsung tanpa syarat minimum jumlah paket. Cocok untuk toko yang baru mulai jualan maupun seller bervolume ribuan paket.</p>
+          <a href="#kalkulator-profit" class="feature-link-label">Simulasikan Penghematan ➔</a>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="feature-clean-card reveal-item delay-2">
+          <div class="feature-icon-square">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+          </div>
+          <h3>Pickup Gratis Tanpa Minimum</h3>
+          <p>Kurir langsung datang menjemput paket ke rumah atau gudang Anda. Walaupun hanya kirim 1 paket, tetap gratis tanpa biaya jemput tambahan.</p>
+          <a href="#cara-kerja" class="feature-link-label">Lihat Alur Pickup ➔</a>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="feature-clean-card reveal-item delay-3">
+          <div class="feature-icon-square">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+              <line x1="2" y1="10" x2="22" y2="10"></line>
+            </svg>
+          </div>
+          <h3>Pencairan COD Kilat 24 Jam</h3>
+          <p>Uang hasil pembayaran COD dari pembeli langsung cair ke rekening bank Anda dalam 1x24 jam setelah paket terkirim. Arus kas toko tetap sehat.</p>
+          <a href="#daftar" class="feature-link-label">Daftar Layanan COD ➔</a>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="feature-clean-card reveal-item delay-4">
+          <div class="feature-icon-square">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <polyline points="6 9 6 2 18 2 18 9"></polyline>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+          </div>
+          <h3>Cetak Resi Otomatis (Batch)</h3>
+          <p>Cetak puluhan hingga ratusan resi thermal dalam 1 klik. Terintegrasi dengan printer Bluetooth dan barcode scanner untuk packing super cepat.</p>
+          <a href="#daftar" class="feature-link-label">Coba Cetak Resi ➔</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 4. CARA KERJA ==================== -->
+  <section class="section-wrap steps-wrapper" id="cara-kerja">
+    <div class="container">
+      <div class="section-header-center reveal-item">
+        <div class="section-pill-tag">Cara Kerja Sederhana</div>
+        <h2 class="section-headline">Kirim Paket Mudah Cuma dalam 3 Langkah</h2>
+        <p class="section-subtext">Cukup buat order dari smartphone atau laptop, kurir ekspedisi yang akan datang ke lokasi Anda.</p>
+      </div>
+
+      <div class="steps-row-grid">
+        <!-- Step 1 -->
+        <div class="step-box-item active reveal-item delay-1" onclick="highlightStep(this)">
+          <div class="step-badge-circle">1</div>
+          <h3>Input Alamat & Pilih Ekspedisi</h3>
+          <p>Masukkan data pembeli, berat paket, lalu pilih ekspedisi dengan tarif termurah atau waktu sampai tercepat sesuai kebutuhan Anda.</p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-box-item reveal-item delay-2" onclick="highlightStep(this)">
+          <div class="step-badge-circle">2</div>
+          <h3>Cetak Label & Request Jemput</h3>
+          <p>Tempel label resi otomatis di paket Anda. Klik tombol "Request Pickup", dan sistem otomatis memanggil kurir terdekat ke rumah Anda.</p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-box-item reveal-item delay-3" onclick="highlightStep(this)">
+          <div class="step-badge-circle">3</div>
+          <h3>Kurir Jemput & Paket Terkirim</h3>
+          <p>Kurir men-scan paket di tempat. Anda dan pembeli bisa memantau status perjalanan paket secara real-time via WhatsApp dan Web.</p>
+        </div>
+      </div>
+
+      <!-- ==================== 5. INTERACTIVE SAVINGS CALCULATOR ==================== -->
+      <div class="calculator-card reveal-item" id="kalkulator-profit">
+        <div class="calc-two-col">
+          <div>
+            <div style="font-size: 0.8rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; margin-bottom: 0.5rem;">
+              Simulasi Penghematan Toko
+            </div>
+            <h3 style="font-size: 1.85rem; font-weight: 800; margin-bottom: 0.75rem; letter-spacing: -0.02em;">
+              Berapa Uang yang Bisa Anda Hemat Tiap Bulan?
+            </h3>
+            <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-bottom: 2rem;">
+              Geser jumlah paket bulanan Anda untuk melihat estimasi cashback ongkir dan efisiensi biaya logistik yang langsung masuk ke kantong bisnis Anda.
+            </p>
+
+            <div class="calc-slider-unit">
+              <div class="calc-label-header">
+                <span>Volume Pengiriman per Bulan:</span>
+                <span class="calc-label-val" id="packageCountVal">300 Paket</span>
+              </div>
+              <input type="range" id="packageSlider" min="50" max="3000" step="50" value="300" />
+            </div>
+
+            <div class="calc-slider-unit">
+              <div class="calc-label-header">
+                <span>Rata-rata Ongkos Kirim per Paket:</span>
+                <span class="calc-label-val" id="avgRateVal">Rp 18.000</span>
+              </div>
+              <input type="range" id="avgRateSlider" min="10000" max="45000" step="1000" value="18000" />
+            </div>
+          </div>
+
+          <div class="calc-stats-whitebox">
+            <div class="calc-stat-label-muted">Estimasi Diskon Ongkir yang Dihemat</div>
+            <div class="calc-stat-big-highlight" id="monthlySavingsVal">
+              Rp 1.080.000
+            </div>
+            <p style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 1.25rem;">
+              Uang hemat dari diskon rata-rata 20% langsung dinikmati sebagai tambahan profit toko Anda.
+            </p>
+
+            <div class="calc-subgrid-stats">
+              <div class="mini-stat-item">
+                <span>Total Pengeluaran Normal:</span>
+                <strong id="normalSpendVal">Rp 5.400.000</strong>
+              </div>
+              <div class="mini-stat-item">
+                <span>Biaya Jemput Paket:</span>
+                <strong style="color: #34d399;">Rp 0 (GRATIS)</strong>
+              </div>
+            </div>
+
+            <a href="#daftar" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 1.75rem;">
+              Klaim Diskon Pengiriman Sekarang ➔
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 6. TESTIMONI ==================== -->
+  <section class="section-wrap" id="testimoni">
+    <div class="container">
+      <div class="section-header-center reveal-item">
+        <div class="section-pill-tag">Testimoni Nyata</div>
+        <h2 class="section-headline">Dipercaya Ribuan Online Shop di Seluruh Indonesia</h2>
+        <p class="section-subtext">Lihat bagaimana seller fashion, kuliner, dan kosmetik menghemat waktu serta biaya kirim bersama KirimKilat.</p>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="filter-pills-row reveal-item">
+        <button class="pill-filter-btn active" onclick="filterReviews('all', this)">Semua Seller</button>
+        <button class="pill-filter-btn" onclick="filterReviews('fashion', this)">👗 Fashion & Pakaian</button>
+        <button class="pill-filter-btn" onclick="filterReviews('skincare', this)">💄 Skincare & Herbal</button>
+        <button class="pill-filter-btn" onclick="filterReviews('fnb', this)">🍪 Kuliner & Hampers</button>
+      </div>
+
+      <div class="testimonials-grid" id="testiGrid">
+        <!-- Review 1 -->
+        <div class="testimonial-card reveal-item delay-1" data-cat="fashion">
+          <div>
+            <div class="testi-stars">★★★★★</div>
+            <p class="testi-quote">
+              "Dulu tiap jam 4 sore ribet bawa berkarung-karung baju ke gerai ekspedisi. Sekarang tinggal klik di KirimKilat, kurir J&T dan SiCepat langsung datang jemput. Diskon ongkirnya lumayan banget bisa hemat Rp 2.5 Juta per bulan!"
+            </p>
+          </div>
+          <div class="testi-author-row">
+            <div class="testi-avatar">RN</div>
+            <div>
+              <div class="testi-author-name">Rian Nugraha</div>
+              <div class="testi-author-business">Owner, Zafira Hijab Official (Bandung)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 2 -->
+        <div class="testimonial-card reveal-item delay-2" data-cat="skincare">
+          <div>
+            <div class="testi-stars">★★★★★</div>
+            <p class="testi-quote">
+              "Layanan COD-nya terbaik! Uang COD dari customer cair otomatis dalam 24 jam masuk ke BCA tanpa perlu ditagih manual. Pelanggan saya di luar Jawa makin percaya belanja karena opsi COD-nya murah."
+            </p>
+          </div>
+          <div class="testi-author-row">
+            <div class="testi-avatar" style="background:#fce7f3; color:#db2777; border-color:#fbcfe8;">DW</div>
+            <div>
+              <div class="testi-author-name">Dewi Wulandari</div>
+              <div class="testi-author-business">Founder, GlowBeauty Skincare (Jakarta)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 3 -->
+        <div class="testimonial-card reveal-item delay-3" data-cat="fnb">
+          <div>
+            <div class="testi-stars">★★★★★</div>
+            <p class="testi-quote">
+              "Fitur cetak resi batch-nya beneran penyelamat saat musim hampers lebaran. Ratusan resi thermal selesai diprint dalam 2 menit. Gak ada lagi salah tulis nama atau alamat pembeli."
+            </p>
+          </div>
+          <div class="testi-author-row">
+            <div class="testi-avatar" style="background:#fef3c7; color:#d97706; border-color:#fde68a;">BS</div>
+            <div>
+              <div class="testi-author-name">Budi Santoso</div>
+              <div class="testi-author-business">Manager, Kopi Roastery Nusantara (Surabaya)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 7. FAQ ACCORDION ==================== -->
+  <section class="section-wrap" id="faq" style="background: var(--bg-white); border-top: 1px solid var(--border-subtle);">
+    <div class="container">
+      <div class="section-header-center reveal-item">
+        <div class="section-pill-tag">Pusat Informasi</div>
+        <h2 class="section-headline">Pertanyaan yang Kerap Ditanyakan</h2>
+        <p class="section-subtext">Semua hal yang perlu Anda ketahui mengenai mekanisme pengiriman dan aktivasi akun.</p>
+      </div>
+
+      <div class="faq-container reveal-item">
+        <!-- FAQ 1 -->
+        <div class="faq-item active">
+          <button class="faq-btn-trigger" onclick="toggleFaq(this)">
+            <span>Apakah ada syarat minimal paket untuk mendapatkan layanan jemput gratis?</span>
+            <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="faq-panel-body">
+            Sama sekali tidak ada minimum paket! Anda bisa me-request pickup meskipun hanya mengirim 1 paket saja. Kurir rekanan kami akan datang menjemput ke alamat rumah atau tempat usaha Anda tanpa dipungut biaya tambahan.
+          </div>
+        </div>
+
+        <!-- FAQ 2 -->
+        <div class="faq-item">
+          <button class="faq-btn-trigger" onclick="toggleFaq(this)">
+            <span>Bagaimana cara kerja pencairan uang COD?</span>
+            <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="faq-panel-body">
+            Begitu paket sampai di tangan pembeli dan uang COD dibayarkan ke kurir, sistem kami langsung memvalidasi status kiriman. Dana COD akan ditransfer otomatis ke rekening bank Anda dalam waktu 1x24 jam kerja tanpa potongan ribet.
+          </div>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="faq-item">
+          <button class="faq-btn-trigger" onclick="toggleFaq(this)">
+            <span>Apakah saya harus membayar biaya pendaftaran atau bulanan?</span>
+            <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="faq-panel-body">
+            KirimKilat 100% gratis digunakan tanpa biaya pendaftaran, tanpa iuran bulanan, dan tanpa kontrak terikat. Anda hanya membayar ongkos kirim paket yang sudah dipotong diskon.
+          </div>
+        </div>
+
+        <!-- FAQ 4 -->
+        <div class="faq-item">
+          <button class="faq-btn-trigger" onclick="toggleFaq(this)">
+            <span>Bagaimana jika terjadi kerusakan atau paket hilang saat pengiriman?</span>
+            <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="faq-panel-body">
+            Setiap paket dilindungi oleh opsi asuransi resmi ekspedisi. Tim Customer Support kami akan membantu proses klaim asuransi dari awal hingga dana ganti rugi cair secara transparan.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 8. SECONDARY CTA CONVERSION ==================== -->
+  <section class="cta-banner-wrap" id="daftar">
+    <div class="container">
+      <div class="cta-clean-card reveal-item">
+        <h2>Siap Kirim Paket Lebih Murah & Bebas Ribet Hari Ini?</h2>
+        <p>Bergabunglah dengan lebih dari 8.500+ pebisnis online yang telah beralih ke KirimKilat. Pendaftaran cuma 1 menit, langsung siap request pickup.</p>
+
+        <form class="lead-signup-form" id="regForm" onsubmit="handleUserSignup(event)">
+          <input 
+            type="text" 
+            class="lead-input-field" 
+            id="sellerNameInput"
+            placeholder="Masukkan Nama Brand / Toko Anda..." 
+            required 
+          />
+          <button type="submit" class="btn-cta-lead">
+            Daftar Gratis Sekarang ➔
+          </button>
+        </form>
+
+        <div class="cta-trust-items">
+          <div class="perk-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Tanpa Biaya Admin</span>
+          </div>
+          <div class="perk-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Langsung Dapat Diskon Ongkir</span>
+          </div>
+          <div class="perk-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Kurir Siap Jemput Hari Ini</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 9. FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-columns">
+        <!-- Brand Info -->
+        <div>
+          <a href="#hero" class="brand-logo">
+            <div class="brand-logo-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              </svg>
+            </div>
+            <div>Kirim<span>Kilat</span></div>
+          </a>
+          <p class="footer-bio-text">
+            Platform agregator logistik dan ekspedisi pintar yang memberdayakan ribuan UMKM dan brand online di seluruh nusantara.
+          </p>
+        </div>
+
+        <!-- Col 1 -->
+        <div>
+          <h4 class="footer-col-title">Layanan</h4>
+          <ul class="footer-links-list">
+            <li><a href="#cek-ongkir">Cek Ongkir Multi-Kurir</a></li>
+            <li><a href="#cek-ongkir" onclick="focusOngkirTab('resi')">Lacak Resi Real-Time</a></li>
+            <li><a href="#fitur">Jemput Paket Gratis</a></li>
+            <li><a href="#fitur">Layanan COD Cepat Cair</a></li>
+            <li><a href="#kalkulator-profit">Kalkulator Diskon</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 2 -->
+        <div>
+          <h4 class="footer-col-title">Mitra Ekspedisi</h4>
+          <ul class="footer-links-list">
+            <li><a href="#fitur">J&T Express Indonesia</a></li>
+            <li><a href="#fitur">SiCepat Ekspres</a></li>
+            <li><a href="#fitur">JNE Express</a></li>
+            <li><a href="#fitur">Anteraja Logistik</a></li>
+            <li><a href="#fitur">Ninja Xpress</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3 -->
+        <div>
+          <h4 class="footer-col-title">Perusahaan</h4>
+          <ul class="footer-links-list">
+            <li><a href="#hero">Tentang KirimKilat</a></li>
+            <li><a href="#testimoni">Cerita Sukses Seller</a></li>
+            <li><a href="#faq">Pusat Bantuan</a></li>
+            <li><a href="#hero">Syarat & Ketentuan</a></li>
+            <li><a href="#hero">Kebijakan Privasi</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Dedicated Portfolio Demo Disclaimer in Footer -->
+      <div class="footer-demo-disclaimer">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.3" style="flex-shrink:0; margin-top:2px;">
+          <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+          <line x1="12" y1="9" x2="12" y2="13"></line>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+        <div>
+          <strong>Peringatan & Catatan Portofolio:</strong> Website ini dibuat khusus sebagai contoh/prototipe (demo web) representasi kemampuan perancangan UI/UX dan pembuatan landing page startup teknologi modern. Seluruh nama ekspedisi, ulasan klien, tarif kalkulator, dan data resi digunakan hanya sebagai materi simulasi interaktif.
+        </div>
+      </div>
+
+      <div class="footer-bottom-row">
+        <div>
+          © 2026 PT Kirim Kilat Logistik Indonesia. Hak Cipta Dilindungi (Demo Portofolio).
+        </div>
+        <div>
+          Membangun rantai pasok pengiriman yang inklusif untuk jutaan pedagang online.
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to Top Button -->
+  <button class="back-top-btn" id="backTopBtn" aria-label="Kembali ke atas">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
+  <!-- Floating Prototype Watermark Badge -->
+  <div class="demo-watermark-badge" onclick="openDemoModal()" title="Klik untuk info prototipe portofolio">
+    <div class="watermark-pulse"></div>
+    <span>Demo Prototype</span>
+  </div>
+
+  <!-- Interactive Feedback Toast -->
+  <div class="toast-popup" id="toastNotice">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <span id="toastNoticeText">Berhasil! Akun Anda siap digunakan.</span>
+  </div>
+
+  <!-- Demo / Prototype Info Modal -->
+  <div class="demo-modal-overlay" id="demoModal" onclick="handleModalOverlayClick(event)">
+    <div class="demo-modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="demo-modal-header">
+        <div style="display:flex; align-items:center; gap:0.6rem;">
+          <span class="demo-tag" style="background:#2563eb;">DEMO / SHOWCASE</span>
+          <h3 id="modalTitle" style="font-size:1.15rem; font-weight:700; color:var(--text-main);">Informasi Prototipe Website</h3>
+        </div>
+        <button onclick="closeDemoModal()" style="background:none; border:none; font-size:1.4rem; color:var(--text-muted); cursor:pointer; line-height:1;" aria-label="Tutup modal">&times;</button>
+      </div>
+
+      <div style="color:var(--text-secondary); font-size:0.92rem; line-height:1.6; display:flex; flex-direction:column; gap:1rem;">
+        <p>
+          👋 <strong>Pemberitahuan:</strong> Website ini adalah <strong>karya prototipe / demo</strong> yang saya buat untuk mendemonstrasikan perancangan landing page startup teknologi modern berstandar profesional.
+        </p>
+
+        <div style="background:var(--bg-subtle); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:1rem;">
+          <div style="font-weight:700; color:var(--text-main); margin-bottom:0.4rem; font-size:0.88rem;">✨ Fitur yang Disimulasikan:</div>
+          <ul style="padding-left:1.2rem; font-size:0.86rem; color:var(--text-secondary); display:flex; flex-direction:column; gap:0.35rem;">
+            <li><strong>Cek Ongkir Dinamis:</strong> Simulasi perhitungan tarif multi-kurir (J&T, SiCepat, JNE, Anteraja) berdasarkan rute & berat paket.</li>
+            <li><strong>Lacak Resi Interaktif:</strong> Input nomor resi dengan respons instan.</li>
+            <li><strong>Kalkulator Penghematan:</strong> Slider interaktif menghitung efisiensi biaya kirim & COD bulanan.</li>
+            <li><strong>100% Standalone (1 File):</strong> Semua CSS & JavaScript tertanam di file <code>index.html</code>, siap langsung di-deploy ke Netlify tanpa build step.</li>
+          </ul>
+        </div>
+
+        <div style="background:#fffbeb; border:1px solid #fef3c7; border-radius:var(--radius-sm); padding:0.85rem; color:#92400e; font-size:0.84rem;">
+          ⚠️ <em>Catatan:</em> Brand mitra ekspedisi, data tarif, ulasan pelanggan, dan transaksi di website ini digunakan semata-mata sebagai materi simulasi dan percontohan desain UI/UX.
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:0.75rem; margin-top:0.35rem;">
+          <button class="btn-primary" onclick="closeDemoModal()" style="padding:0.6rem 1.4rem; font-size:0.9rem;">
+            Saya Mengerti 👍
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       INLINE JS: INTERACTION, CALCULATOR, TABS & OBSERVER
+       ============================================================ -->
+  <script>
+    // Rates Database Sample Matrix for Interactive Cek Ongkir
+    const baseRatesMatrix = {
+      'Jakarta-Surabaya': { jnt: 19000, sicepat: 18000, jne: 20000, anteraja: 17500 },
+      'Jakarta-Bandung': { jnt: 11000, sicepat: 10000, jne: 12000, anteraja: 10500 },
+      'Jakarta-Yogyakarta': { jnt: 17000, sicepat: 16500, jne: 18000, anteraja: 16000 },
+      'Jakarta-Denpasar': { jnt: 24000, sicepat: 23000, jne: 25000, anteraja: 22500 },
+      'Jakarta-Makassar': { jnt: 36000, sicepat: 35000, jne: 38000, anteraja: 34000 },
+
+      'Bandung-Surabaya': { jnt: 18000, sicepat: 17000, jne: 19000, anteraja: 17000 },
+      'Bandung-Jakarta': { jnt: 11000, sicepat: 10000, jne: 12000, anteraja: 10500 },
+      'Bandung-Yogyakarta': { jnt: 15000, sicepat: 14500, jne: 16000, anteraja: 14000 },
+
+      'Surabaya-Jakarta': { jnt: 19000, sicepat: 18000, jne: 20000, anteraja: 17500 },
+      'Surabaya-Bandung': { jnt: 18000, sicepat: 17000, jne: 19000, anteraja: 17000 },
+      'Surabaya-Denpasar': { jnt: 14000, sicepat: 13500, jne: 15000, anteraja: 13000 }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Initial Cek Ongkir calculation
+      calculateShippingRates();
+
+      // 2. Weight slider sync
+      const weightRange = document.getElementById('weightRange');
+      const weightDisplay = document.getElementById('weightDisplay');
+      weightRange.addEventListener('input', () => {
+        weightDisplay.textContent = `${parseFloat(weightRange.value).toFixed(1)} kg`;
+        calculateShippingRates();
+      });
+
+      // 3. Savings Calculator Listeners
+      const pkgSlider = document.getElementById('packageSlider');
+      const rateSlider = document.getElementById('avgRateSlider');
+      pkgSlider.addEventListener('input', updateSavingsCalc);
+      rateSlider.addEventListener('input', updateSavingsCalc);
+      updateSavingsCalc();
+
+      // 4. Scroll events (Navbar shadow + Back to top)
+      const mainNav = document.getElementById('mainNav');
+      const backTopBtn = document.getElementById('backTopBtn');
+
+      window.addEventListener('scroll', () => {
+        const scY = window.scrollY;
+        if (scY > 20) {
+          mainNav.classList.add('scrolled');
+        } else {
+          mainNav.classList.remove('scrolled');
+        }
+
+        if (scY > 380) {
+          backTopBtn.classList.add('show');
+        } else {
+          backTopBtn.classList.remove('show');
+        }
+      });
+
+      backTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // 5. Mobile Drawer
+      const mobileToggle = document.getElementById('mobileToggle');
+      const mobileDrawer = document.getElementById('mobileDrawer');
+      mobileToggle.addEventListener('click', () => {
+        mobileDrawer.classList.toggle('open');
+      });
+
+      document.querySelectorAll('.mobile-drawer-link').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileDrawer.classList.remove('open');
+        });
+      });
+
+      // 6. Scroll Reveal Observer
+      const revealItems = document.querySelectorAll('.reveal-item');
+      const obs = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      revealItems.forEach(el => obs.observe(el));
+    });
+
+    // Cek Ongkir Calculator Logic
+    function calculateShippingRates() {
+      const origin = document.getElementById('originSelect').value;
+      const dest = document.getElementById('destSelect').value;
+      const weight = parseFloat(document.getElementById('weightRange').value);
+      const container = document.getElementById('ratesOutputList');
+
+      const routeKey = `${origin}-${dest}`;
+      const defaultRates = { jnt: 20000, sicepat: 19000, jne: 21000, anteraja: 18500 };
+      const base = baseRatesMatrix[routeKey] || defaultRates;
+
+      const couriers = [
+        { name: 'J&T EZ', brand: 'J&T', cls: 'courier-jnt', base: base.jnt, eta: '1 - 2 Hari', discount: 0.25 },
+        { name: 'SiCepat REG', brand: 'SiCepat', cls: 'courier-sicepat', base: base.sicepat, eta: '1 - 2 Hari', discount: 0.20 },
+        { name: 'JNE Reguler', brand: 'JNE', cls: 'courier-jne', base: base.jne, eta: '2 - 3 Hari', discount: 0.15 },
+        { name: 'Anteraja Regular', brand: 'Anteraja', cls: 'courier-anteraja', base: base.anteraja, eta: '1 - 3 Hari', discount: 0.22 }
+      ];
+
+      container.innerHTML = '';
+
+      couriers.forEach(c => {
+        const normalPrice = Math.round(c.base * weight);
+        const discountedPrice = Math.round(normalPrice * (1 - c.discount));
+
+        const item = document.createElement('div');
+        item.className = 'rate-card-item';
+        item.innerHTML = `
+          <div class="courier-info">
+            <span class="courier-pill ${c.cls}">${c.brand}</span>
+            <div>
+              <div class="courier-service-name">${c.name}</div>
+              <div class="courier-eta">Estimasi: ${c.eta} • Jemput Gratis</div>
+            </div>
+          </div>
+          <div class="courier-pricing">
+            <div class="price-normal">Rp ${normalPrice.toLocaleString('id-ID')}</div>
+            <div class="price-discounted">Rp ${discountedPrice.toLocaleString('id-ID')}</div>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    // Tab Switching for Cek Ongkir vs Lacak Resi
+    function switchOngkirTab(tab) {
+      const tabOngkirBtn = document.getElementById('tabOngkirBtn');
+      const tabResiBtn = document.getElementById('tabResiBtn');
+      const panelOngkir = document.getElementById('panelOngkir');
+      const panelResi = document.getElementById('panelResi');
+
+      if (tab === 'ongkir') {
+        tabOngkirBtn.classList.add('active');
+        tabResiBtn.classList.remove('active');
+        panelOngkir.style.display = 'block';
+        panelResi.style.display = 'none';
+      } else {
+        tabResiBtn.classList.add('active');
+        tabOngkirBtn.classList.remove('active');
+        panelOngkir.style.display = 'none';
+        panelResi.style.display = 'block';
+      }
+    }
+
+    function focusOngkirTab(tab) {
+      switchOngkirTab(tab);
+      const target = document.getElementById('cek-ongkir');
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Simulated Resi Tracker
+    function trackResi() {
+      const val = document.getElementById('resiInput').value.trim();
+      if (!val) return;
+      showToastNotice(`🔍 Menemukan status paket untuk resi: ${val}`);
+    }
+
+    // Step Highlighting
+    function highlightStep(card) {
+      document.querySelectorAll('.step-box-item').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+    }
+
+    // Interactive Savings & COD Calculator
+    function updateSavingsCalc() {
+      const count = parseInt(document.getElementById('packageSlider').value);
+      const rate = parseInt(document.getElementById('avgRateSlider').value);
+
+      document.getElementById('packageCountVal').textContent = `${count} Paket`;
+      document.getElementById('avgRateVal').textContent = `Rp ${rate.toLocaleString('id-ID')}`;
+
+      const totalNormal = count * rate;
+      const discountRate = 0.20; // 20% average discount
+      const totalSaved = Math.round(totalNormal * discountRate);
+
+      document.getElementById('monthlySavingsVal').textContent = `Rp ${totalSaved.toLocaleString('id-ID')}`;
+      document.getElementById('normalSpendVal').textContent = `Rp ${totalNormal.toLocaleString('id-ID')}`;
+    }
+
+    // Filter Testimonials
+    function filterReviews(category, btn) {
+      document.querySelectorAll('.pill-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const cards = document.querySelectorAll('.testimonial-card');
+      cards.forEach(card => {
+        if (category === 'all' || card.getAttribute('data-cat') === category) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // FAQ Toggle
+    function toggleFaq(btn) {
+      const item = btn.parentElement;
+      const all = document.querySelectorAll('.faq-item');
+      all.forEach(i => {
+        if (i !== item) i.classList.remove('active');
+      });
+      item.classList.toggle('active');
+    }
+
+    // Toast Notice Helper
+    function showToastNotice(msg) {
+      const toast = document.getElementById('toastNotice');
+      const text = document.getElementById('toastNoticeText');
+      text.textContent = msg;
+      toast.classList.add('visible');
+      setTimeout(() => {
+        toast.classList.remove('visible');
+      }, 4000);
+    }
+
+    // Registration Lead Submission
+    function handleUserSignup(e) {
+      e.preventDefault();
+      const input = document.getElementById('sellerNameInput');
+      const name = input.value.trim();
+      if (name) {
+        showToastNotice(`🎉 Selamat! Akun untuk "${name}" berhasil dibuat. Kurir siap jemput!`);
+        input.value = '';
+      }
+    }
+
+    // Demo / Prototype Modal & Banner Handlers
+    function openDemoModal() {
+      const modal = document.getElementById('demoModal');
+      if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeDemoModal() {
+      const modal = document.getElementById('demoModal');
+      if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function handleModalOverlayClick(e) {
+      if (e.target && e.target.id === 'demoModal') {
+        closeDemoModal();
+      }
+    }
+
+    function dismissDemoBanner() {
+      const banner = document.getElementById('demoBanner');
+      if (banner) {
+        banner.style.display = 'none';
+        const heroWrap = document.querySelector('.hero-wrap');
+        if (heroWrap) {
+          heroWrap.style.paddingTop = window.innerWidth <= 768 ? '105px' : '110px';
+        }
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeDemoModal();
+      }
+    });
+  </script>
+</body>
+</html>

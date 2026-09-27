@@ -1,0 +1,6 @@
+{
+  "name": "KirimKilat - Agregator Ekspedisi & Pengiriman Paket",
+  "description": "Platform agregator pengiriman paket, cek ongkir instan multi-ekspedisi, jemput paket gratis, dan pencairan COD 24 jam untuk bisnis online.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
